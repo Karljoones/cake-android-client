@@ -1,11 +1,11 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.utils;
 
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 /**
  * Created by Riad on 20/05/2015.
@@ -14,25 +14,20 @@ public class StreamUtils {
     private static final String TAG = StreamUtils.class.getSimpleName();
 
     // Can you see what's wrong with this???
+    // Without the use of a buffer, this can be quite memory intensive in larger applications
     public static byte[] readUnknownFully(InputStream stream) throws IOException {
-        // Read in stream of bytes
-        ArrayList<Byte> data = new ArrayList<>();
-        while (true) {
-            int result = stream.read();
-            if (result == -1) {
-                break;
-            }
-            data.add((byte) result);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        // this is storage overwritten on each iteration with bytes
+        byte[] buffer = new byte[1024];
+
+        // This is the amount of bytes that were read in order to write them to the byteBuffer
+        int len;
+        while ((len = stream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
         }
 
-        // Convert ArrayList<Byte> to byte[]
-        byte[] bytes = new byte[data.size()];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = data.get(i);
-        }
-
-        // Return the raw byte array.
-        return bytes;
+        return byteBuffer.toByteArray();
     }
 
     public static void close(Closeable closeable) {

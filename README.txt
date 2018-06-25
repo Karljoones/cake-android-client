@@ -1,3 +1,17 @@
+***
+NOTES
+***
+
+Hi there,
+
+Thank you for taking time to review this code.
+
+If I was to do this with third party libraries, I would definitely have chosen to do this with OkHttp to handle all network code, along with Jackson XML to handle the efficient parsing of the JSON data (not that the current JSON parsing is not efficient!)
+
+Hope you like it!
+
+- Karl
+
 Coding Test (fictitious)
 
 

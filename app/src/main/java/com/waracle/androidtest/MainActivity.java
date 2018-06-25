@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
+            // Show the loading fragment as the data is loading, this keeps the user informed as to the state of the application
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new LoadingFragment()).commit();
         }
 
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Cake> array) {
             cakes = array;
-            // Show the cake list fragment.
+            // Show the cake list fragment with the information that is now loaded
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new CakeListFragment()).commit();
         }
     }

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class CakeListFragment extends Fragment {
 
     private RecyclerView mListView;
-    private ListAdapter mAdapter;
 
     public CakeListFragment() { /**/ }
 
@@ -42,6 +41,7 @@ public class CakeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mListView = rootView.findViewById(R.id.list);
+
         return rootView;
     }
 
@@ -50,20 +50,12 @@ public class CakeListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // Create and set the list adapter.
-        mAdapter = new ListAdapter(((MainActivity) getActivity()).getCakes());
+        ListAdapter mAdapter = new ListAdapter(((MainActivity) getActivity()).getCakes());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mListView.setLayoutManager(layoutManager);
         mListView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(8), true));
         mListView.setItemAnimator(new DefaultItemAnimator());
         mListView.setAdapter(mAdapter);
-    }
-
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
     // This code was replaced with a recycler view as this is more efficient than a list view.
@@ -89,14 +81,16 @@ public class CakeListFragment extends Fragment {
             holder.title.setText(cakes.get(pos).getTitle());
             holder.desc.setText(cakes.get(pos).getDesc());
 
+            // Load the image into the view
             mImageLoader.load(cakes.get(pos).getImageData(), holder.image);
         }
 
         @Override
         public int getItemCount() {
-            return ((MainActivity) getContext()).getCakes().size();
+            return cakes.size();
         }
 
+        // View holder to hold the views that are used with the list items.
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image;
             TextView title, desc;
@@ -147,5 +141,13 @@ public class CakeListFragment extends Fragment {
                 }
             }
         }
+    }
+
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }
